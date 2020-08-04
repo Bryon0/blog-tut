@@ -12,8 +12,6 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 const app = express();
 
-let posts = [];
-
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -33,21 +31,27 @@ const Post = mongoose.model('Post', postSchema);
 
 
 app.get('/', (req, res) => {
-  res.render("home", {content: homeStartingContent, posts: posts });
+  Post.find({}, (posts) => {
+    res.render("home", {content: homeStartingContent, posts: posts });
+  });
 });
 
 app.post('/compose', (req, res) => {
   //Make a new object with the incoming data.
-  console.log(req.body);
+  
   const post = new Post({
     title: req.body.postTitle,
     text: req.body.postText
   });
 
-  post.save();
-  
-  posts.push(post);
-  res.redirect('/');
+  console.log("Saving new post to database.");
+  post.save((err) => {
+    if(!err) {
+      res.redirect('/');
+    } else {
+      console.log(err);
+    }
+  });
 });
 
 app.get('/compose', (req, res) => {
@@ -75,6 +79,20 @@ app.get('/posts/:postName', (req, res) => {
 
   }
 });
+
+app.get('/posts/:id', (req, res) => { 
+  const requestedTitle = _.lowerCase(req.params.postName);
+
+  Post.findById(req.params.id, (err, post) => {
+    if(!err) {
+      res.render("post", {title: post.title, text: post.text });
+    } else {
+      console.log(err);
+    }
+    
+  })
+});
+
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");
