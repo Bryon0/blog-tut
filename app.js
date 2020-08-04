@@ -25,7 +25,7 @@ mongoose.connect('mongodb://localhost:27017/blogDb', {useNewUrlParser: true, use
 //This is the database schema.
 const postSchema = {
   title: String,
-  content: String
+  text: String
 };
 
 //Next create the model that is built around the schema.
@@ -38,13 +38,14 @@ app.get('/', (req, res) => {
 
 app.post('/compose', (req, res) => {
   //Make a new object with the incoming data.
+  console.log(req.body);
   const post = new Post({
     title: req.body.postTitle,
     text: req.body.postText
   });
 
   post.save();
-  console.log(post);
+  
   posts.push(post);
   res.redirect('/');
 });
