@@ -72,19 +72,19 @@ app.get('/contact', (req, res) => {
   res.render("contact", {content: contactContent});
 });
 
-app.get('/posts/:postName', (req, res) => { 
-  const requestedTitle = _.lowerCase(req.params.postName);
+// app.get('/posts/:postName', (req, res) => { 
+//   const requestedTitle = _.lowerCase(req.params.postName);
 
-  for(let i = 0; i < posts.length; i++) {
-    const storedTitle = _.lowerCase(posts[i].title)
-    if(storedTitle === requestedTitle) {
-      res.render("post", {title: posts[i].title, text: posts[i].text });
-    } else {
-      console.log("false");
-    }
+//   for(let i = 0; i < posts.length; i++) {
+//     const storedTitle = _.lowerCase(posts[i].title)
+//     if(storedTitle === requestedTitle) {
+//       res.render("post", {title: posts[i].title, text: posts[i].text });
+//     } else {
+//       console.log("false");
+//     }
 
-  }
-});
+//   }
+// });
 
 app.get('/posts/:id', (req, res) => { 
   const requestedTitle = _.lowerCase(req.params.postName);
